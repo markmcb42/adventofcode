@@ -7,7 +7,7 @@ from string import ascii_uppercase as uc
 import copy
 
 wires = []
-file = open('input.txt', 'r')
+file = open('input03.txt', 'r')
 for line in file:
   x, y = 0, 0
   wire = []
