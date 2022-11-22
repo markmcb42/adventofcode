@@ -4,51 +4,44 @@ from collections import Counter
 
 regs = {}
 max_val = 0
-file = open('input.txt', 'r')
+file = open('input09.txt', 'r')
 for line in file:
     line = line.strip()
 
-    data = line.split('if')
-    cmd = data[0].split()
-    if cmd[0] not in regs:
-        regs[cmd[0]] = 0
+#line = '{{<!!>},{<!!>},{<!!>},{<!!>}}'
+groups = []
+chars = 0
+cur_group = 0
+isCancel = False
+inGarbage = False
 
-    cond = data[1].split()
-    if cond[0] not in regs:
-        regs[cond[0]] = 0
+for c in line:
 
-    val = regs[cond[0]]
-    check = int(cond[2])
-    isValid = False
-    if '>=' == cond[1]:
-        isValid = val >= check
-    elif '>' == cond[1]:
-        isValid = val > check
-    elif '<' == cond[1]:
-        isValid = val < check
-    elif '<=' == cond[1]:
-        isValid = val <= check
-    elif '!=' == cond[1]:
-        isValid = val != check
-    elif '==' == cond[1]:
-        isValid = val == check
+  if isCancel:
+    isCancel = False
+    continue
 
-    if isValid:
-        if 'inc' == cmd[1]:
-            regs[cmd[0]] += int(cmd[2])
-        else:
-            regs[cmd[0]] -= int(cmd[2])
-        if regs[cmd[0]] > max_val:
-            max_val = regs[cmd[0]]
+  if c == '!':
+    isCancel = True
+    continue
 
-print(max_val)
-max_val = 0
-for val in regs.values():
-    if val > max_val:
-        max_val = val
+  if inGarbage:
+    if c == '>':
+      inGarbage = False
+    else:
+     chars += 1
+    continue
 
-print(max_val)
+  if c == '{':
+    cur_group += 1
+    groups.append(cur_group)
+  elif c == '}':
+    cur_group -= 1
+  elif c == '<':
+    inGarbage = True
 
+total = 0
+for g in groups:
+  total += g
 
-
-
+print('Part 1: {} Part 2: {}'.format(total, chars))

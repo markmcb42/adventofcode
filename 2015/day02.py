@@ -1,17 +1,17 @@
 
 import sys
 
-file = open('input', 'r')
+file = open('input02.txt', 'r')
 
-total = 0
-
+ribbon = 0
+paper = 0
 for line in file:
 
   data = line.split('x')
   dim = [int(x) for x in data]
   dim.sort()
 
-  cur = (2 * (dim[0] + dim[1])) + (dim[0] * dim[1] * dim[2])
-  total += cur
+  paper += (2 * dim[0] * dim[1]) + (2 * dim[1] * dim[2]) + (2 * dim[0] * dim[2]) + (dim[0] * dim[1])
+  ribbon += (2 * (dim[0] + dim[1])) + (dim[0] * dim[1] * dim[2])
 
-print('Total square feet needed {}'.format(total))
+print('Part 1: {} Part 2: {}'. format(paper, ribbon))

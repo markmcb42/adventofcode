@@ -30,7 +30,3 @@ print(''.join(str(x) for x in recipes[r_num:r_num+10]))
 r_num = 18
 recipes = [3, 7]
 while True:
-
-
-
-
