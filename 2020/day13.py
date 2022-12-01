@@ -40,9 +40,10 @@ for b in buses:
     min = delta
     bus = b
 
-print(min * bus)
+print('Part 1 {}'.format(min * bus))
 
 timestamp = first * 100000000000000
+timestamp = first
 found = False
 
 count = 0
@@ -60,5 +61,6 @@ while not found:
 
   if found:
     print(timestamp)
+    sys.exit()
 
 

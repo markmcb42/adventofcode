@@ -8,7 +8,7 @@ import numpy as np
 #lens = [97,167,54,178,2,11,209,174,119,248,254,0,255,1,64,190]
 #lens = [3, 4, 1, 5]
 lens = []
-file = open('input.txt', 'r')
+file = open('input10.txt', 'r')
 for line in file:
     line = line.strip()
     for c in line:
@@ -54,5 +54,5 @@ while pos < len(cir_list):
     #print(format(val, 'x'))
     pos += 16
 
-print(hash_val)
+print(hash_val, len(hash_val))
 

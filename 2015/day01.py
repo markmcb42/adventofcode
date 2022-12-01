@@ -1,10 +1,11 @@
 
 import sys
 
-file = open('input', 'r')
+file = open('input01.txt', 'r')
 
 cur = 0
 pos = 1
+basement = 0
 for line in file:
   for char in line:
 
@@ -13,9 +14,9 @@ for line in file:
     if char == ')':
       cur -= 1
 
-    if cur == -1:
-      break
+    if cur == -1 and basement == 0:
+      basement = pos
 
     pos += 1
 
-print('basement position  {}'.format(pos))
+print('Part 1: {} Part 2: {}'.format(cur, basement))

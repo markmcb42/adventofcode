@@ -7,91 +7,96 @@ from string import ascii_uppercase as uc
 import copy
 from collections import Counter
 
-x, y = 0, 0
 
-dir = 'E'
+cmds = []
 file = open('input12.txt', 'r')
 for line in file:
   line = line.strip()
 
   action = line[0]
   val = int(line[1:])
+  cmds.append((action, val))
 
-  if action == 'N':
+# Part 1
+x, y = 0, 0
+dir = 'E'
+
+rdirs = ['N', 'E', 'S', 'W']
+ldirs = ['N', 'W', 'S', 'E']
+
+for c in cmds:
+  action = c[0]
+  val = c[1]
+
+  # Move ship in indicated direction
+  if (action == 'N') or ((action == 'F') and (dir == 'N')):
     x += val
-  elif action == 'S':
+  elif (action == 'S') or ((action == 'F') and (dir == 'S')):
     x -= val
-  elif action == 'E':
+  elif (action == 'E') or ((action == 'F') and (dir == 'E')):
     y += val
-  elif action == 'W':
+  elif (action == 'W') or ((action == 'F') and (dir == 'W')):
     y -= val
 
-  elif action == 'F':
-    if dir == 'N':
-      x += val
-    elif dir == 'S':
-      x -= val
-    elif dir == 'E':
-      y += val
-    elif dir == 'W':
-      y -= val
-
   elif action == 'R':
+    index = rdirs.index(dir)
     if val == 90:
-      if dir == 'N':
-        dir = 'E'
-      elif dir == 'E':
-        dir = 'S'
-      elif dir == 'S':
-        dir = 'W'
-      elif dir == 'W':
-        dir = 'N'
+      delta = 1
     elif val == 180:
-      if dir == 'N':
-        dir = 'S'
-      elif dir == 'E':
-        dir = 'W'
-      elif dir == 'S':
-        dir = 'N'
-      elif dir == 'W':
-        dir = 'E'
+      delta = 2
     elif val == 270:
-      if dir == 'N':
-        dir = 'W'
-      elif dir == 'W':
-        dir = 'S'
-      elif dir == 'S':
-        dir = 'E'
-      elif dir == 'E':
-        dir = 'N'
+      delta = 3
+    index += delta
+    dir = rdirs[index % len(rdirs)]
 
   elif action == 'L':
+    index = ldirs.index(dir)
     if val == 90:
-      if dir == 'N':
-        dir = 'W'
-      elif dir == 'W':
-        dir = 'S'
-      elif dir == 'S':
-        dir = 'E'
-      elif dir == 'E':
-        dir = 'N'
+      delta = 1
     elif val == 180:
-      if dir == 'N':
-        dir = 'S'
-      elif dir == 'E':
-        dir = 'W'
-      elif dir == 'S':
-        dir = 'N'
-      elif dir == 'W':
-        dir = 'E'
+      delta = 2
     elif val == 270:
-      if dir == 'N':
-        dir = 'E'
-      elif dir == 'E':
-        dir = 'S'
-      elif dir == 'S':
-        dir = 'W'
-      elif dir == 'W':
-        dir = 'N'
+      delta = 3
+    index += delta
+    dir = ldirs[index % len(ldirs)]
 
-print(abs(x) + abs(y))
+
+print('Part 1 {}'.format(abs(x) + abs(y)))
+
+x, y = 0, 0
+wp_x = 1
+wp_y = 10
+
+for c in cmds:
+  action = c[0]
+  val = c[1]
+
+  # Move ship towards waypoint
+  if action == 'F':
+    x += (wp_x * val)
+    y += (wp_y * val)
+
+  # Move waypoint
+  elif action == 'N':
+    wp_x += val
+  elif action == 'S':
+    wp_x -= val
+  elif action == 'E':
+    wp_y += val
+  elif action == 'W':
+    wp_y -= val
+
+  # Rotate waypoint around ship
+  elif ((action == 'R') and (val == 90)) or ((action == 'L') and (val == 270)):
+    tmp_x = -wp_y
+    wp_y = wp_x
+    wp_x = tmp_x
+  elif (action == 'R' or action == 'L') and (val == 180):
+    wp_y = -wp_y
+    wp_x = -wp_x
+  elif ((action == 'L') and (val == 90)) or ((action == 'R') and (val == 270)):
+    tmp_y = -wp_x
+    wp_x = wp_y
+    wp_y = tmp_y
+
+print('Part 2 {}'.format(abs(x) + abs(y)))
