@@ -1,35 +1,45 @@
 
 import sys
 
-file = open('input', 'r')
+file = open('input06.txt', 'r')
 
-line = file.readline().strip()
-#line = '3,4,3,1,2'
-data = line.split(',')
+data = [int(x) for x in file.readline().strip().split(',')]
 
-print(data)
-
-fish = []
-
+fish = {}
 for x in data:
-  fish.append(int(x))
-
-print('number of fish is {}'.format(len(fish)))
+  if x in fish:
+    fish[x] += 1
+  else:
+    fish[x] = 1
 
 for i in range(256):
  
-  count = 0
-  for x in range(len(fish)):
-    if fish[x] == 0:
-      fish[x] = 6
-      count += 1
+  new_fish = {}
+  for x in fish:
+    if x == 0:
+      new_fish[8] = fish[x]
+      if 6 in new_fish:
+        new_fish[6] += fish[x]
+      else:
+        new_fish[6] = fish[x]
     else:
-      fish[x] -= 1
+      if x-1 in new_fish:
+        new_fish[x-1] += fish[x]
+      else:
+        new_fish[x-1] = fish[x]
 
-  for j in range(count):
-    fish.append(8)
+  fish = new_fish
 
-  if i % 3 == 0:
-    print(i)
-print('There are {} fish'.format(len(fish)))
+  if i == 79:
+    total = 0
+    for i in fish:
+      total += fish[i]
+    print('Part 1: {}'.format(total))
+
+
+total = 0
+for i in fish:
+  total += fish[i]
+
+print('Part 2: {}'.format(total))
 

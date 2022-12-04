@@ -1,105 +1,73 @@
 
-import sys
+import copy
 
-grid = []
+grid_p1 = []
+grid_p2 = []
 for i in range(1000):
   col = []
   for j in range(1000):
     col.append(0)
-  grid.append(col)
+  grid_p1.append(col)
+  grid_p2.append(copy.deepcopy(col))
 
-file = open('input', 'r')
+file = open('input05.txt', 'r')
 
 for line in file:
-  line = line.strip()
-
-  #print(line)
-  data = line.split(' -> ')
-  p1 = data[0].split(',')
-  p2 = data[1].split(',')
+  data = line.strip().split(' -> ')
+  p1 = [int(x) for x in data[0].split(',')]
+  p2 = [int(x) for x in data[1].split(',')]
 
   # Check if this is a row
   if p1[0] == p2[0]:
-    #print('row')
-    x = int(p1[0])
+    x = p1[0]
+    starty = min(p1[1], p2[1])
+    endy = max(p1[1], p2[1])
 
-    y1 = int(p1[1])
-    y2 = int(p2[1])
-    if y1 < y2:
-      starty = y1
-      endy = y2
-    else:
-      starty = y2
-      endy = y1
-       
     for j in range(starty, endy+1):
-      grid[x][j] += 1
-
-    #print('x {} starty {} endy {}'.format(x, starty, endy))
-    #for i in range(1000):
-    #  print(grid[i])
+      grid_p1[x][j] += 1
+      grid_p2[x][j] += 1
 
   # Check if this is a col
   elif p1[1] == p2[1]:
-    #print('col')
-    y = int(p1[1])
-
-    x1 = int(p1[0])
-    x2 = int(p2[0])
-
-    if x1 < x2:
-      startx = x1
-      endx = x2
-    else:
-      startx = x2
-      endx = x1
+    y = p1[1]
+    startx = min(p1[0], p2[0])
+    endx = max(p1[0], p2[0])
 
     for i in range(startx, endx+1):
-      grid[i][y] += 1
-
-    #print('y {} startx {} endx {}'.format(y, startx, endx))
-    #for i in range(1000):
-    #  print(grid[i])
+      grid_p1[i][y] += 1
+      grid_p2[i][y] += 1
 
   # This is a diagonal
   else:
-    
-    x1 = int(p1[0])
-    y1 = int(p1[1])
-
-    x2 = int(p2[0])
-    y2 = int(p2[1])
-
     xlist = []
     ylist = []
 
-    diff = 0
-    if x1 < x2:
-      diff = x2 - x1
-    else:
-      diff = x1 - x2
+    diff = abs(p1[0] - p2[0])
 
     for i in range(diff):
-      if x1 < x2:
-        xlist.append(x1+i)
+      if p1[0] < p2[0]:
+        xlist.append(p1[0]+i)
       else: 
-        xlist.append(x1-i)
+        xlist.append(p1[0]-i)
 
-      if y1 < y2:
-        ylist.append(y1+i)
+      if p1[1] < p2[1]:
+        ylist.append(p1[1]+i)
       else: 
-        ylist.append(y1-i)
+        ylist.append(p1[1]-i)
 
-    xlist.append(x2)
-    ylist.append(y2)
+    xlist.append(p2[0])
+    ylist.append(p2[1])
 
     for x,y in zip(xlist, ylist):
-      grid[x][y] += 1
+      grid_p2[x][y] += 1
  
-count = 0
+p1_count = 0
+p2_count = 0
 for i in range(1000):
   for j in range(1000):
-    if grid[i][j] > 1:
-      count += 1
+    if grid_p1[i][j] > 1:
+      p1_count += 1
+    if grid_p2[i][j] > 1:
+      p2_count += 1
 
-print('Count is {}'.format(count))
+print('Part 1: {} Part 2: {}'.format(p1_count, p2_count))
