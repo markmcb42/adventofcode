@@ -1,17 +1,17 @@
 
 import sys
 
+
 def calc_score(num, board):
 
-  
-  sum = 0;
+  total = 0;
   for i in range(0,5):
     for j in range(0,5):
       if 0 == board[i][j][1]:
-        sum += board[i][j][0]
+        total += board[i][j][0]
 
-  print('Sum is {} num {} total {}'.format(sum, num, (sum*num)))
-  sys.exit()
+  return total * num
+
 
 # Check col
 def check_col(col, board):
@@ -19,8 +19,8 @@ def check_col(col, board):
   for i in range(0,5):
     if board[i][col][1] == 0:
       return False
-
   return True
+
 
 # Check row
 def check_row(row, board):
@@ -28,38 +28,31 @@ def check_row(row, board):
   for j in range(0,5):
     if board[row][j][1] == 0:
       return False
-
   return True
 
-# See if any boards have won
-def check_win(boards, num):
 
-  for board in boards:
+# See if this board won
+def check_win(board):
 
-    # Check rows
-    for i in range(0,5):
-      if check_row(i, board):
-        print('Found row in {}'.format(board))
-        #calc_score(num, board)
-        return board
+  # Check rows
+  for i in range(0,5):
+    if check_row(i, board):
+      return True
 
-    # Check cols
-    for j in range(0,5):
-      if check_col(j, board):
-        print('Found col in {}'.format(board))
-        #calc_score(num, board)
-        return board
+  # Check cols
+  for j in range(0,5):
+    if check_col(j, board):
+      return True
 
-  return None
+  return False
       
 
 numbers = []
-
-file = open('input', 'r')
+file = open('input04.txt', 'r')
 line = file.readline()
 
 line = line.strip()
-numbers = [ int(n) for n in line.split(',')]
+numbers = [int(n) for n in line.split(',')]
 
 boards = []
 board = [] 
@@ -72,36 +65,22 @@ for line in file:
 
   if count == 5:
     boards.append(board)
-    #print(board)
     board = []
     count = 0
 
-  line = line.strip()
-  data = line.split()
-  col = []
+  data = line.strip().split()
+  row = []
   for num in data:
-    col.append((int(num), 0))
+    row.append((int(num), 0))
 
-  board.append(col)
+  board.append(row)
   count += 1
-
-board = []
-for i in range(0,5):
-  col = []
-  for j in range(0,5):
-    if j == 2:
-      col.append((200,1))
-    else:
-      col.append((200,0))
-  board.append(col)
-#boards.append(board)
 
 # Go through the numbers and mark each board with a 1
 count = 0
-isLast = False
+firstWin = False
 for num in numbers:
-
-  print('Check {}'.format(num))
+  wins = []
   for board in boards:
 
     for i in range(0,5):
@@ -109,19 +88,13 @@ for num in numbers:
         if num == board[i][j][0]:
           board[i][j] = (num, 1)
 
-  card = check_win(boards, num)
-  if card is not None:
-    if isLast:
-      calc_score(num, boards[0])
+    if check_win(board):
+      if not firstWin:
+        print('Part 1: {}'.format(calc_score(num, board)))
+        firstWin = True
+      wins.append(board)
 
-    while card is not None:
-
-      if len(boards) == 1:
-        isLast = True
-        break
-
-      boards.remove(card)
-      card = check_win(boards, num)
-
-
-print('Failed to find a win')
+  for w in wins:
+    boards.remove(w)
+    if len(boards) == 0:
+      print('Part 2: {}'.format(calc_score(num, w)))

@@ -1,14 +1,22 @@
 
 import sys
 
-file = open('input', 'r')
+file = open('input01.txt', 'r')
 
 windowLens = []
 curWindow = []
-
+cur = 0
+count = 0
 for line in file:
 
-  curWindow.append(int(line))
+  val = int(line.strip())
+  if cur != 0:
+    if val > cur:
+      count += 1
+
+  cur = val
+
+  curWindow.append(val)
   if len(curWindow) < 3:
     continue
 
@@ -18,6 +26,8 @@ for line in file:
     sum = sum + i
     
   windowLens.append(sum)
+
+print('Part 1: {}'.format(count))
 
 count = 0
 cur = 0
@@ -34,4 +44,4 @@ for i in windowLens:
     if cur > prev:
       count += 1
 
-print('Increased {} times'.format(count))
+print('Part 2: {}'.format(count))
