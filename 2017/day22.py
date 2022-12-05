@@ -26,8 +26,8 @@ for row in range(len(lines)):
     grid[row][col] = line[col]
 
 dirs = ['u', 'l', 'd', 'r']
-row = 12
-col = 12
+row = 1
+col = 1
 dir_index = 0
 count = 0
 for i in range(10000000):
