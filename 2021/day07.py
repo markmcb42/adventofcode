@@ -1,33 +1,38 @@
 
 import sys
 
-file = open('input', 'r')
+file = open('input07.txt', 'r')
 
 line = file.readline().strip()
-#line = '3,4,3,1,2'
+depth = [int(x) for x in line.split(',')]
 
-depth = [ int(x) for x in line.split(',')]
+max_depth = max(depth)
+min_depth = min(depth)
 
-max = max(depth)
-min = min(depth)
+least_p1 = sys.maxsize
+least_p2 = sys.maxsize
 
-least = sys.maxsize
+costs = {}
 
-for i in range(min, max):
+for i in range(min_depth, max_depth):
 
-  cur = 0
+  cur_p1 = 0
+  cur_p2 = 0
   for x in depth:
     dif = abs(x - i)
-    l = list(range(dif+1))
-    cur += sum(l)
 
-    #count = 1
-    #for y in range(dif):
-    #  cur += count
-    #  count += 1
-    #cur += abs(x - i)
+    # Part 1
+    cur_p1 += dif
 
-  if cur < least:
-    least = cur
+    # Part 2
+    if dif+1 not in costs:
+      costs[dif+1] = sum(list(range(dif+1)))
+    cur_p2 += costs[dif+1]
 
-print('Least fuel is {}'.format(least))
+  if cur_p1 < least_p1:
+    least_p1 = cur_p1
+
+  if cur_p2 < least_p2:
+    least_p2 = cur_p2
+
+print('Part 1: {} Part 2: {}'.format(least_p1, least_p2))
