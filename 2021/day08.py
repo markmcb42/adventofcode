@@ -1,28 +1,9 @@
 
 import sys
 
-#class Digit:
-  
-digits = {}
-digits[0] = ''
-digits[1] = ''
-digits[2] = ''
-digits[3] = ''
-digits[4] = ''
-digits[5] = ''
-digits[6] = ''
-digits[7] = ''
-digits[8] = ''
-digits[9] = ''
+digits = {0: '', 1: '', 2: '', 3: '', 4: '', 5: '', 6: '', 7: '', 8: '', 9: ''}
+mapping = {'top': '', 'mid': '', 'bot': '', 'ul': '', 'ur': '', 'll': ''}
 
-mapping = {}
-mapping['top'] = ''
-mapping['mid'] = ''
-mapping['bot'] = ''
-mapping['ul'] = ''
-mapping['ur'] = ''
-mapping['ll'] = ''
-mapping['top'] = ''
 
 def check_digit(input, digit):
 
@@ -33,8 +14,10 @@ def check_digit(input, digit):
       break
   return ret
 
-file = open('input', 'r')
 
+file = open('input08.txt', 'r')
+
+total_p1 = 0
 total = 0
 for line in file:
 
@@ -50,9 +33,9 @@ for line in file:
       digits[1] = data
     elif len(data) == 4:
       digits[4] = data
-    elif len(data)== 3:
+    elif len(data) == 3:
       digits[7] = data
-    elif len(data)== 7:
+    elif len(data) == 7:
       digits[8] = data
 
   # find top from 1,7
@@ -127,12 +110,17 @@ for line in file:
     digit = 0
     if len(data) == 2:
       digit = 1
+      total_p1 += 1
     elif len(data) == 3:
       digit = 7
+      total_p1 += 1
     elif len(data) == 4:
       digit = 4
+      total_p1 += 1
     elif len(data) == 7:
       digit = 8
+      total_p1 += 1
+
     elif len(data) == 5:
       if check_digit(data, digits[2]):
         digit = 2
@@ -140,9 +128,7 @@ for line in file:
         digit = 3
       elif check_digit(data, digits[5]):
         digit = 5
-      else:
-        print('Bad value len 5 for {}'.format(data))
-        sys.exit()
+
     elif len(data) == 6:
       if check_digit(data, digits[0]):
         digit = 0
@@ -150,15 +136,10 @@ for line in file:
         digit = 6
       elif check_digit(data, digits[9]):
         digit = 9
-      else:
-        print('Bad value len 6 for {}'.format(data))
-        print(digits)
-        sys.exit()
 
     val += digit * (10**index)
     index += 1 
 
   total += val
-  #print('val is {}'.format(val))
 
-print('total is {}'.format(total))
+print('Part 1: {} Part 2: {}'.format(total_p1, total))
