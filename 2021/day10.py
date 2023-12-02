@@ -1,6 +1,6 @@
 import sys
 
-file = open('input', 'r')
+file = open('input10.txt', 'r')
 
 open_chars = '([{<'
 close_chars = ')]}>'
@@ -21,7 +21,6 @@ for line in file:
       pos = close_chars.find(c)
       cur = cur_open[-1]
       if cur != open_chars[pos]:
-        print('Failed')
         score += scores[pos]
         error = True
         break
@@ -48,6 +47,6 @@ for line in file:
 comp_scores.sort()
 mid = int(len(comp_scores) / 2)
 winner = comp_scores[mid]
-print('Score is {}'.format(score))
-print('winning Completion score {}'.format(winner))
+print('Part 1: {}'.format(score))
+print('Part 2: {}'.format(winner))
 
