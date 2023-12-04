@@ -61,7 +61,7 @@ for line in file:
       mapping['mid'] = x    
       break
 
-  # Determing digit 0 from 'mid'
+  # Determine digit 0 from 'mid'
   for data in input:
     if len(data) == 6:
       hasMid = False
